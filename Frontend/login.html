@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HR Harmony</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1d1f22;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Navbar Styles */
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav .logo {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Login Section */
+        .auth-container {
+            display: flex;
+            width: 60%;
+            background: #25282b;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin-top: 60px;
+        }
+
+        /* Login Form */
+        .auth-form {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Input Fields */
+        .input-field {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-field input {
+            width: 87%;
+            padding: 10px 40px 10px 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: #f0f0f0;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Login Button */
+        .login-button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #41644A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background-color: #45a049;
+        }
+
+        
+        .social-login {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .facebook-login { background: #3b5998; }
+        .twitter-login { background: #1da1f2; }
+        .google-login { background: #db4437; }
+
+        .social-button i {
+            margin-right: 10px;
+        }
+
+       
+        .auth-image {
+            width: 50%;
+            height: 100%;
+        }
+
+        .auth-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                width: 90%;
+            }
+
+            .auth-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li class="logo">HR Harmony</li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="chatbot.html">Chat Bot</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Login Section -->
+<div class="auth-container">
+    <!-- Login Form -->
+    <div class="auth-form">
+        <h2>Login</h2>
+        <div class="input-field">
+            <input type="text" placeholder="Username or Email" required>
+            <i class="fas fa-user input-icon"></i>
+        </div>
+        <div class="input-field">
+            <input type="password" placeholder="Password" required>
+            <i class="fas fa-lock input-icon"></i>
+        </div>
+        <div class="remember-me">
+            <input type="checkbox"> <span>Remember me</span>
+        </div>
+        <button class="login-button">Login</button>
+
+        
+        <div class="social-login">
+            <button class="social-button facebook-login">
+                <i class="fab fa-facebook-f"></i>Login with Facebook
+            </button>
+            <button class="social-button twitter-login">
+                <i class="fab fa-twitter"></i>Login with Twitter
+            </button>
+            <button class="social-button google-login">
+                <i class="fab fa-google"></i>Login with Google
+            </button>
+        </div>
+    </div>
+
+    
+    <div class="auth-image">
+        <img src="https://imgc.artprintimages.com/img/print/lonie-bee-baseball-in-the-boardroom-saturday-evening-post-cover-october-8-1960_u-l-q1hyblm0.jpg?background=F3F3F3" alt="HR Harmony Illustration">
+    </div>
+</div>
+
+</body>
+</html>
