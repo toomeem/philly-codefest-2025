@@ -1,2 +1,5 @@
 Backend\API\Src\.env
 Backend\Databases\Src\.env
+Backend/API/Src/.env
+.gitignore
+Backend/Databases/Src/.env
