@@ -1,12 +1,16 @@
+# imports for the program
 from openai import OpenAI
 from astrapy import DataAPIClient
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+# key varibles
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 DATASTAX_KEY = os.getenv('DATASTAX_KEY')
 
-client = OpenAI(api_key="Add key here") 
+
+# create the client for database acess
 client = OpenAI(api_key=OPENAI_API_KEY) 
 
 
@@ -18,7 +22,7 @@ db = client.get_database_by_api_endpoint(
 
 
 
-
+# loop to go through all of the regulations
 with open('Nexora_HR_Regulations.txt', 'r') as file:
     phrase = ""
 
@@ -30,6 +34,7 @@ with open('Nexora_HR_Regulations.txt', 'r') as file:
       else:
          #createEmbedding(phrase)
          phrase = ""
+         phrase = phrase + line
 
 
 
