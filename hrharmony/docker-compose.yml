@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+    command: ["npm", "run", "dev", "--", "--port", "5050"]
+
+
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"  # Updated backend port
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+    command: ["python", "app.py"]
