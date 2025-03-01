@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <!-- Link to Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #1d1f22;
+            color: #f0f0f0;
+        }
+
+        /* Navbar Styles */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav .logo {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Main Content Styles */
+        main {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        #memory-container {
+            width: 22.5%;
+            padding: 10px;
+            background-color: #333;
+            border-right: 1px solid #444;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #memory-container:hover {
+            opacity: 1;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            width: 74%;
+            height: 100%;
+            padding: 10px;
+            background-color: #25282b;
+        }
+
+        .chat-message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            background-color: #4a90e2;
+            align-self: flex-start;
+        }
+
+        .bot-message {
+            background-color: #7c8d92;
+            align-self: flex-end;
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        #chat-input {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #input-text {
+            width: 94%;
+            padding: 10px;
+            border-radius: 50px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #f0f0f0;
+        
+        }
+
+        #send-icon {
+            padding: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #send-icon:hover {
+            background-color: #45a049;
+        }
+
+        .memory-item {
+            background-color: #4a4a4a;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+
+        /* Hover styles for memory container */
+        #memory-container:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li class="logo">HR Harmony</li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="chatbot.html">Chat Bot</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div id="memory-container">
+        <h3>Chat Memory</h3>
+        <div id="memory-box"></div>
+    </div>
+
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="chat-input">
+            <input type="text" id="input-text" placeholder="Type your message..." />
+            <button id="send-icon">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</main>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const memoryBox = document.getElementById('memory-box');
+    const inputText = document.getElementById('input-text');
+    const sendIcon = document.getElementById('send-icon');
+
+    let memory = [];
+
+    const addMessage = (message, sender) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message', sender === 'user' ? 'user-message' : 'bot-message');
+        messageDiv.textContent = message;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    const addMemory = (message, sender) => {
+        const memoryItem = document.createElement('div');
+        memoryItem.classList.add('memory-item');
+        memoryItem.textContent = `${sender}: ${message}`;
+        memoryBox.appendChild(memoryItem);
+    };
+
+    const handleBotResponse = (userMessage) => {
+        // For simplicity, the bot just echoes the user's message here
+        return `You said: "${userMessage}"`;
+    };
+
+    const updateChat = () => {
+        const userMessage = inputText.value;
+        if (userMessage.trim() !== '') {
+            // Add user message to chat
+            addMessage(userMessage, 'user');
+            // Save user message in memory
+            memory.push({ sender: 'user', message: userMessage });
+            addMemory(userMessage, 'user');
+            
+            // Get bot response
+            const botResponse = handleBotResponse(userMessage);
+            // Add bot response to chat
+            addMessage(botResponse, 'bot');
+            // Save bot response in memory
+            memory.push({ sender: 'bot', message: botResponse });
+            addMemory(botResponse, 'bot');
+        }
+
+        inputText.value = '';
+    };
+
+    sendIcon.addEventListener('click', updateChat);
+    inputText.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            updateChat();
+        }
+    });
+</script>
+
+</body>
+</html>
+
