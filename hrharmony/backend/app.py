@@ -2,8 +2,8 @@ import random
 import string
 
 import boto3
+from Databases.Src.postgresql import create_user as create_user_in_db
 from flask import Flask, request
-from .Databases.Src.postgresql import create_user as create_user_in_db
 
 app = Flask(__name__)
 
@@ -34,7 +34,7 @@ def create_user():
   last_name = request_data["last_name"]
   password = generate_password()
   create_user_in_db(email, department, first_name, last_name, password)
-  return "200"
+  return {"password": password}
 
 
 
