@@ -10,18 +10,6 @@ client = OpenAI(api_key="Add key here")
 client = OpenAI(api_key=OPENAI_API_KEY) 
 
 
-# function to create embedding
-def createEmbedding(phrase):
-    response = client.embeddings.create(
-    input=phrase,
-    model="text-embedding-3-small"
-    )
-   
-    return response
-
-
-from astrapy import DataAPIClient
-
 # Initialize the client
 client = DataAPIClient(DATASTAX_KEY)
 db = client.get_database_by_api_endpoint(
@@ -29,5 +17,32 @@ db = client.get_database_by_api_endpoint(
 )
 
 
-print(f"Connected to Astra DB: {db.list_collection_names()}")
+
+
+with open('Nexora_HR_Regulations.txt', 'r') as file:
+    phrase = ""
+
+    for line in file:
+
+      if (line[0] != "#"):
+         phrase = phrase + line
+
+      else:
+         #createEmbedding(phrase)
+         phrase = ""
+
+
+
+# function to create embedding
+def createEmbedding(phrase):
+    response = client.embeddings.create(
+    input=phrase,
+    model="text-embedding-3-small"
+    )
+
+    
+   
+    
+
+
 
