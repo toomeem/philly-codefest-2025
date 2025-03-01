@@ -11,6 +11,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # function to create embedding
 def createEmbedding(phrase):
 
+
     response = client.embeddings.create(
     input="Your text string goes here",
     model="text-embedding-3-small"
