@@ -5,3 +5,5 @@ Backend\Databases\Src\.env
 Backend/API/Src/.env
 .gitignore
 Backend/Databases/Src/.env
+hrharmony/backend/API/Src/.env
+hrharmony/backend/Databases/Src/.env
