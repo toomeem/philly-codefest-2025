@@ -4,8 +4,8 @@ from pprint import pprint
 
 from flask import Flask, request
 
-from hrharmony.backend.helper_functions.edit_users import (fetch_user,          update_user_in_db, create_user_in_db, delete_user_in_db)
-
+from backend.helper_functions.edit_users import (fetch_user,update_user_in_db, create_user_in_db, delete_user_in_db)
+from backend.helper_functions.edit_files import upload_file_to_s3
 app = Flask(__name__)
 
 
@@ -21,10 +21,10 @@ def home():
 @app.route("/file", methods=["POST"])
 def upload_file():
   file = request.files["file"]
-
-  file.save(f"uploads/{file.filename}")
-  return "200"
-
+  file_name = file.filename
+  organization_id = request.form["organization_id"]
+  file.save(f"tmp/{file_name}")
+  return upload_file_to_s3(organization_id, file_name)
 
 
 @app.route("/user", methods=["POST"])
