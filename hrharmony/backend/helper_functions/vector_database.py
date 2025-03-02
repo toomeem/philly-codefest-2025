@@ -1,39 +1,20 @@
-
 from openai import OpenAI
 from astrapy import DataAPIClient
 import os
 from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from astrapy import DataAPIClient
 
-
-
-# Load environment variables
-load_dotenv()
-
-# Debug: Check if API keys are loaded
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-DATASTAX_KEY = os.getenv('DATASTAX_KEY')
-if not DATASTAX_KEY:
-    raise ValueError("ERROR: DATASTAX_KEY is not set! Check your .env file.")
-
-# Create clients
-clientOpenAI = OpenAI(api_key=OPENAI_API_KEY)
-clientDataAPI = DataAPIClient(DATASTAX_KEY)
-
-# Connect to Astra database
-database_url = "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
-database = clientDataAPI.get_database(database_url, keyspace="default_keyspace")
-
-# Ensure collection exists
-collection_name = "hr_document"
-
-try:
-    collection = database.get_collection(collection_name)
-except Exception:
-    collection = database.create_collection(collection_name)  # No extra args
+# declare local constants
+COLLECTION_NAME = "hr_document"
+DATABASE_URL = "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
 
 # Function to create and store embeddings
 def createEmbedding(phrase, title):
+    # Create clients
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    clientOpenAI = OpenAI(api_key=OPENAI_API_KEY)
+    
     response = clientOpenAI.embeddings.create(
         input=phrase,
         model="text-embedding-3-small",
@@ -42,6 +23,10 @@ def createEmbedding(phrase, title):
     embedding = response.data[0].embedding  # Extract embedding vector
 
     # Insert into database
+    DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+    clientDataAPI = DataAPIClient(DATASTAX_KEY)
+    database = clientDataAPI.get_database(DATABASE_URL, keyspace="default_keyspace")
+    collection = database.get_collection(COLLECTION_NAME)
     collection.insert_one({
         "title": title.strip(),
         "$vector": embedding,  # Store only vector, not full response
@@ -68,22 +53,18 @@ def addFile(fileName):
     for c in range(len(chunks)): # loop through the list
         createEmbedding(chunks[c].page_content, fileName + "_" + str(c))  # Store section in database
 
-
-
-from astrapy import DataAPIClient
-import os
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-
+#search for a like query
 def searchEmbedding(query):
     # Get an existing collection
+    DATASTAX_KEY = os.getenv('DATASTAX_KEY')
     client = DataAPIClient(DATASTAX_KEY)
-    database = client.get_database("https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com")
-    collection = database.get_collection("hr_document")
+    database = client.get_database(DATABASE_URL)
+    collection = database.get_collection(COLLECTION_NAME)
 
     # Find a document
     result = collection.find_one(
     {},  # Adjust your query to match the data you're looking for
-    sort={"$vectorize": "PTO"}
+    sort={"$vectorize": query}
     )
 
     # Check if result is found
@@ -133,22 +114,21 @@ def searchEmbedding(query):
         return
 
     # Print the chunk based on the index
-    print(chunks[chunk_index])
-
-
+    return chunks[chunk_index].page_content
 
 
 def deleteTableEntry(documentId):
-  from astrapy import DataAPIClient
+  
 
   # Replace with your Astra DB credentials
+  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
   ASTRA_DB_APPLICATION_TOKEN = DATASTAX_KEY  # Ensure this is set correctly
-  ASTRA_DB_API_ENDPOINT = "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
+ 
 
   # Initialize DataAPIClient
-  client = DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
-  db = client.get_database_by_api_endpoint(ASTRA_DB_API_ENDPOINT)
-  collection = db.get_collection("hr_document")  # Get the collection (table)
+  client = DataAPIClient(DATABASE_URL)
+  db = client.get_database_by_api_endpoint(DATABASE_URL)
+  collection = db.get_collection(COLLECTION_NAME)  # Get the collection (table)
 
   # Delete the document by ID
   collection.delete_one({"_id": documentId})
@@ -156,25 +136,15 @@ def deleteTableEntry(documentId):
   print(f"Document with ID {documentId} deleted successfully.")
 
 def clearAllEntries():
-  from astrapy import DataAPIClient
-
-  # Replace with your Astra DB credentials
-  ASTRA_DB_APPLICATION_TOKEN = DATASTAX_KEY  # Ensure this is set correctly
-  ASTRA_DB_API_ENDPOINT = "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
-
+  
+  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+  
   # Initialize DataAPIClient
-  client = DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
-  db = client.get_database_by_api_endpoint(ASTRA_DB_API_ENDPOINT)
-  collection = db.get_collection("hr_document")  # Get the collection (table)
+  client = DataAPIClient(DATASTAX_KEY)
+  db = client.get_database_by_api_endpoint(DATABASE_URL)
+  collection = db.get_collection(COLLECTION_NAME)  # Get the collection (table)
 
   # Delete all documents in the collection
   collection.delete_many({})
 
   print("All documents deleted successfully.")
-
-
-
-
-
-
-
