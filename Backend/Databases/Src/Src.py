@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
+
 # Load environment variables
 load_dotenv()
 
@@ -64,8 +65,9 @@ def addFile(fileName):
       text = file.read() # reads file and save as string
     #split string into a list of strings 
     chunks = text_splitter.create_documents([text])
-    for c in chunks: # loop through the list
-        createEmbedding(c.page_content, fileName)  # Store section in database
+    for c in range(len(chunks)): # loop through the list
+        createEmbedding(chunks[c].page_content, fileName + "_" + c)  # Store section in database
+        
                
 
 def searchEmbedding(query):
@@ -77,11 +79,40 @@ def searchEmbedding(query):
   # Find a document
   result = collection.find_one(
       {},
+      projection=["$vector"],
       sort={"$vectorize": query}
   )
 
-  print(result)
+#constant to hold the length of each chunck
+  CHUNK_LEN = 200
+
+  #split id into filename and 
+  chunk_index = result.split("_")[-1]
+  filename = result[:-len(chunk_index)-1]
+
+  #create text splitter to divide up the file
+  text_splitter = RecursiveCharacterTextSplitter(
+      chunk_size = CHUNK_LEN,
+      chunk_overlap = round(CHUNK_LEN * .2),
+      length_function = len,
+      is_separator_regex= False
+    )
+
+  with open('Backend/Databases/Documents/' + filename, 'r', encoding="utf-8") as file:
+    text = file.read() # reads file and save as string
+    #split string into a list of strings 
+    chunks = text_splitter.create_documents([text])
+
+  print(chunks[chunk_index])
+
+
+
+
+  
+
 
 
     
 searchEmbedding("PTO")
+
+
