@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 
 def create_org_in_db(orgid, name, admin=None ):
-  id = str(uuid.uuid4())
+  orgid = str(uuid.uuid4())
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
     database="postgres",
@@ -14,7 +14,7 @@ def create_org_in_db(orgid, name, admin=None ):
     port="5432"
   )
   cur = conn.cursor()
-  cur.execute(f'''INSERT INTO orgs (id, admin, name) VALUES
+  cur.execute(f'''INSERT INTO orgs (orgid, admin, name) VALUES
   ('{orgid}', '{admin}', '{name}')''')
   conn.commit()
   cur.close()
@@ -22,7 +22,7 @@ def create_org_in_db(orgid, name, admin=None ):
   return True
   
 
-def fetch_org_in_db(id=None, email=None, password=None):
+def fetch_org_in_db(orgid=None, email=None, password=None):
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
     database="postgres",
@@ -31,8 +31,8 @@ def fetch_org_in_db(id=None, email=None, password=None):
     port="5432"
   )
   cur = conn.cursor()
-  if id:
-    cur.execute(f"SELECT * FROM orgs WHERE id='{id}'")
+  if orgid:
+    cur.execute(f"SELECT * FROM orgs WHERE orgid='{orgid}'")
   else:
     cur.close()
     conn.close()
@@ -43,8 +43,8 @@ def fetch_org_in_db(id=None, email=None, password=None):
   return user
 
 
-def update_org_in_db(id, name= None, admin=None):
- user = fetch_org_in_db(id=id)
+def update_org_in_db(orgid, name= None, admin=None):
+ user = fetch_org_in_db(orgid=orgid)
  if not user:
     return
  conn = psycopg2.connect(
@@ -56,17 +56,17 @@ def update_org_in_db(id, name= None, admin=None):
   )
  cur = conn.cursor()
  if name:
-    cur.execute(f"UPDATE orgs SET name='{name}' WHERE id='{id}'")
+    cur.execute(f"UPDATE orgs SET name='{name}' WHERE orgid='{orgid}'")
  if admin:
-    cur.execute(f"UPDATE orgs SET admin='{admin}' WHERE id='{id}'")
+    cur.execute(f"UPDATE orgs SET admin='{admin}' WHERE orgid='{orgid}'")
 
  conn.commit()
  cur.close()
  return True
 
 
-def delete_org_in_db():
-  user = fetch_org_in_db(id=id)
+def delete_org_in_db(orgid):
+  user = fetch_org_in_db(orgid=orgid)
   if not user:
     return
   conn = psycopg2.connect(
@@ -77,7 +77,7 @@ def delete_org_in_db():
     port="5432"
   )
   cur = conn.cursor()
-  cur.execute(f"DELETE FROM orgs WHERE id='{id}'")
+  cur.execute(f"DELETE FROM orgs WHERE orgid='{orgid}'")
   conn.commit()
   cur.close()
   conn.close()
