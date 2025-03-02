@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 
 import helper_functions.vector_database
 from dotenv import load_dotenv

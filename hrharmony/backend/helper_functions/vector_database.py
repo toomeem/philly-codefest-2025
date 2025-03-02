@@ -134,7 +134,3 @@ def clearAllEntries():
 
   print("All documents deleted successfully.")
 
-clearAllEntries()
-addFile("Nexora_HR_Regulations_2.txt")
-addFile("Nexora_HR_Regulations.txt")
-addFile("Vertex_HR_Regulations.txt")
