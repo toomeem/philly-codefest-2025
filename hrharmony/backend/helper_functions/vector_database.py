@@ -14,7 +14,7 @@ DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
 # Function to create and store embeddings
 def createEmbedding(phrase, title):
   # Create clients
-  OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+  OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
   clientOpenAI = OpenAI(api_key=OPENAI_API_KEY)
 
   response = clientOpenAI.embeddings.create(
@@ -24,7 +24,7 @@ def createEmbedding(phrase, title):
   )
   embedding = response.data[0].embedding  # Extract embedding vector
   # Insert into database
-  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+  DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   clientDataAPI = DataAPIClient(DATASTAX_KEY)
   database = clientDataAPI.get_database(DATABASE_URL, keyspace="default_keyspace")
   collection = database.get_collection(COLLECTION_NAME)
@@ -44,7 +44,7 @@ def addFile(fileName):
     length_function = len,
     is_separator_regex= False
   )
-  with open('backend/Databases/' + fileName, 'r', encoding="utf-8") as file:
+  with open("backend/Databases/" + fileName) as file:
     text = file.read() # reads file and save as string
   #split string into a list of strings
   chunks = text_splitter.create_documents([text])
@@ -54,7 +54,7 @@ def addFile(fileName):
 #search for a like query
 def searchEmbedding(query):
   # Get an existing collection
-  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+  DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   client = DataAPIClient(DATASTAX_KEY)
   database = client.get_database(DATABASE_URL)
   collection = database.get_collection(COLLECTION_NAME)
@@ -94,7 +94,7 @@ def searchEmbedding(query):
     print(f"File {filename} does not exist.")
     return
 
-  with open(file_path, 'r', encoding="utf-8") as file:
+  with open(file_path) as file:
     text = file.read()  # Read the file and save as string
     # Split string into a list of strings (chunks)
     chunks = text_splitter.create_documents([text])
@@ -106,10 +106,9 @@ def searchEmbedding(query):
     return chunks
   return chunks[:5]
 
-
 def deleteTableEntry(documentId):
   # Replace with your Astra DB credentials
-  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+  DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   # Initialize DataAPIClient
   client = DataAPIClient(DATASTAX_KEY)
   db = client.get_database_by_api_endpoint(DATABASE_URL)
@@ -120,7 +119,7 @@ def deleteTableEntry(documentId):
   print(f"Document with ID {documentId} deleted successfully.")
 
 def clearAllEntries():
-  DATASTAX_KEY = os.getenv('DATASTAX_KEY')
+  DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   # Initialize DataAPIClient
   client = DataAPIClient(DATASTAX_KEY)
   db = client.get_database_by_api_endpoint(DATABASE_URL)
