@@ -1,1 +1,116 @@
-{}
+{
+  "4a85be08-8b60-46f1-a062-8ecf5b527c28": [
+    {
+      "role": "system",
+      "content": "You are an HR chatbot designed to assist employees with HR-related inquiries using the Retrieval-Augmented Generation (RAG) approach. Your task is to provide accurate, helpful, and timely responses to employee questions by retrieving relevant information from the HR knowledge base and generating answers.\n\nHow You Should Work:\n\nRetrieve: When a user submits a query, extract relevant documents, excerpts, or knowledge pieces from the HR knowledge base.\nGenerate: Use the retrieved information to craft a clear, concise, and human-readable response tailored to the employee\u2019s situation.\nContextual Understanding: Ensure answers align with company policies and provide guidance when personalized details require HR contact.\nHandle Ambiguity: If the query is unclear, ask clarifying questions. If no answer is found, suggest contacting HR directly.\nProvide References: Include citations from HR documentation to allow employees to verify information.\nTone and Professionalism: Maintain a friendly, professional, and empathetic tone.\nUser Query Template:\n\nEach query will follow this structured format:\n\nUSER QUERY:\n\n{USER_QUERY}\n\nRELEVANT CONTEXT:\n\n{CHUNK_1}\n\n{CHUNK_2}\n\n{CHUNK_3}\n\n{CHUNK_4}\n\n{CHUNK_5}\n\nGenerate a response based on the retrieved context while ensuring clarity and accuracy. ONLY return your final response. Do not include this template in the response. Do not provide the list of chunks in the response. Do not provide the context you were given in the response. You are allowed to respond to questions about previous messages\n"
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''## 1. Employee Code of Conduct'''\n'''Employees are expected to maintain professionalism, integrity, and respect in all interactions. Adherence to ethical behavior, a business-casual dress code, and workplace etiquette is required.'''\n'''## 2. Attendance and Punctuality Policy\nEmployees must adhere to their designated work schedules, report absences promptly, and comply with leave request procedures.'''\n'''## 3. Equal Employment Opportunity Policy\nNexora Tech Solutions is committed to a diverse and inclusive workplace, ensuring equal opportunities regardless of race, gender, religion, or disability.'''\n'''## 4. Harassment and Discrimination Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "what is my dress code?"
+    },
+    {
+      "role": "assistant",
+      "content": "The dress code at Nexora Tech Solutions is business-casual. Employees are expected to maintain professionalism in their attire while adhering to the guidelines of the dress code. If you have specific questions or need clarification on what constitutes business-casual attire, feel free to ask!"
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''1. Employee Code of Conduct'''\n'''Employees must uphold professionalism, integrity, and respect in all interactions. Ethical behavior, a business-casual dress code, and adherence to workplace etiquette are required at all times.'''\n'''2. Attendance and Work Hours Policy'''\n'''Employees must follow assigned work schedules, report absences promptly, and request time off in accordance with company procedures. Flexible work arrangements are available for eligible employees.'''\n'''3. Equal Employment Opportunity Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "what was my previous message?"
+    },
+    {
+      "role": "assistant",
+      "content": "Your previous message asked about the dress code."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''1. Employee Code of Conduct'''\n'''Employees must uphold professionalism, integrity, and respect in all interactions. Ethical behavior, a business-casual dress code, and adherence to workplace etiquette are required at all times.'''\n'''2. Attendance and Work Hours Policy'''\n'''Employees must follow assigned work schedules, report absences promptly, and request time off in accordance with company procedures. Flexible work arrangements are available for eligible employees.'''\n'''3. Equal Employment Opportunity Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "do i have pto"
+    },
+    {
+      "role": "assistant",
+      "content": "To determine your specific Paid Time Off (PTO) balance or eligibility, it's best to refer to your individual employment agreement or your HR dashboard if available. If you're unsure or need detailed information, I recommend contacting HR directly for assistance with your PTO inquiries. They can provide personalized information based on your circumstances."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''1. Employee Code of Conduct'''\n'''Employees must uphold professionalism, integrity, and respect in all interactions. Ethical behavior, a business-casual dress code, and adherence to workplace etiquette are required at all times.'''\n'''2. Attendance and Work Hours Policy'''\n'''Employees must follow assigned work schedules, report absences promptly, and request time off in accordance with company procedures. Flexible work arrangements are available for eligible employees.'''\n'''3. Equal Employment Opportunity Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "what is the Customer and Client Interaction Policy?"
+    },
+    {
+      "role": "assistant",
+      "content": "It appears that the specific details of the Customer and Client Interaction Policy are not included in the information I have access to. I recommend reaching out to HR directly for the most accurate and detailed information regarding this policy. They will be able to provide you with the guidelines and expectations related to customer and client interactions at Nexora Tech Solutions."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''1. Employee Code of Conduct'''\n'''Employees must uphold professionalism, integrity, and respect in all interactions. Ethical behavior, a business-casual dress code, and adherence to workplace etiquette are required at all times.'''\n'''2. Attendance and Work Hours Policy'''\n'''Employees must follow assigned work schedules, report absences promptly, and request time off in accordance with company procedures. Flexible work arrangements are available for eligible employees.'''\n'''3. Equal Employment Opportunity Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "what expenses are covered for business trips"
+    },
+    {
+      "role": "assistant",
+      "content": "The specific details regarding expenses covered for business trips are not included in the provided information. Typically, expenses such as transportation, accommodation, meals, and incidentals may be reimbursed, but it is best to consult the travel policy or HR for the exact guidelines. Please reach out to HR for comprehensive details about what expenses are eligible for reimbursement during business trips."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''21. Conflict of Interest Policy'''\n'''Employees must avoid conflicts of interest, including personal, financial, or business relationships that may interfere with their responsibilities. Any potential conflicts must be disclosed to HR or'''\n'''conflicts must be disclosed to HR or management.'''\n'''22. Intellectual Property Rights Policy'''\n'''Any work, inventions, or developments created using company resources or within the scope of employment are the property of Nexora Tech Solutions. Employees must respect copyright, trademarks, and'''"
+    },
+    {
+      "role": "user",
+      "content": "is remote work allowed?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, flexible work arrangements, including remote work, are available for eligible employees at Nexora Tech Solutions. However, specific eligibility criteria and guidelines may apply, so it's best to check with your manager or HR for more details regarding your situation and the process to request remote work."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''## 1. Employee Code of Conduct'''\n'''Employees are expected to maintain professionalism, integrity, and respect in all interactions. Adherence to ethical behavior, a business-casual dress code, and workplace etiquette is required.'''\n'''## 2. Attendance and Punctuality Policy\nEmployees must adhere to their designated work schedules, report absences promptly, and comply with leave request procedures.'''\n'''## 3. Equal Employment Opportunity Policy\nNexora Tech Solutions is committed to a diverse and inclusive workplace, ensuring equal opportunities regardless of race, gender, religion, or disability.'''\n'''## 4. Harassment and Discrimination Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "Do I have pto?"
+    },
+    {
+      "role": "assistant",
+      "content": "To find out if you have Paid Time Off (PTO) and what your current balance is, you should check your employment records or HR dashboard. If you're unable to access this information, I recommend reaching out to HR directly for assistance. They can provide specific details regarding your PTO entitlement and remaining balance."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''21. Conflict of Interest Policy'''\n'''Employees must avoid conflicts of interest, including personal, financial, or business relationships that may interfere with their responsibilities. Any potential conflicts must be disclosed to HR or'''\n'''conflicts must be disclosed to HR or management.'''\n'''22. Intellectual Property Rights Policy'''\n'''Any work, inventions, or developments created using company resources or within the scope of employment are the property of Nexora Tech Solutions. Employees must respect copyright, trademarks, and'''"
+    },
+    {
+      "role": "user",
+      "content": "is remote work allowed?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, remote work is allowed at Nexora Tech Solutions for eligible employees, as flexible work arrangements are available. However, specific eligibility criteria and guidelines may apply, so it's best to discuss the details with your manager or HR to understand the process and requirements for requesting remote work."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''## 1. Employee Code of Conduct'''\n'''Employees are expected to maintain professionalism, integrity, and respect in all interactions. Adherence to ethical behavior, a business-casual dress code, and workplace etiquette is required.'''\n'''## 2. Attendance and Punctuality Policy\nEmployees must adhere to their designated work schedules, report absences promptly, and comply with leave request procedures.'''\n'''## 3. Equal Employment Opportunity Policy\nNexora Tech Solutions is committed to a diverse and inclusive workplace, ensuring equal opportunities regardless of race, gender, religion, or disability.'''\n'''## 4. Harassment and Discrimination Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "de resignations require 2 weeks?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, it is generally expected that employees provide a two-week notice period when resigning from their position. This allows for a smoother transition and gives the company time to manage the departure. However, it's always a good idea to check with your specific department or HR for any additional requirements or variations on this policy."
+    }
+  ]
+}

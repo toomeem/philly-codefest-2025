@@ -48,6 +48,40 @@ const ChatbotPage = () => {
         setConversations([...conversations, `Conversation ${conversations.length + 1}`]);
         setMessages([]);
     };
+    // conversations[2] = [
+    //     {
+    //     "role": "user",
+    //     "content": "is remote work allowed?"
+    //     },
+    //     {
+    //     "role": "assistant",
+    //     "content": "Yes, flexible work arrangements, including remote work, are available for eligible employees at Nexora Tech Solutions. However, specific eligibility criteria and guidelines may apply, so it's best to check with your manager or HR for more details regarding your situation and the process to request remote work."
+    //     },
+    //     {
+    //     "role": "user",
+    //     "content": "Do I have pto?"
+    //     },
+    //     {
+    //     "role": "assistant",
+    //     "content": "To find out if you have Paid Time Off (PTO) and what your current balance is, you should check your employment records or HR dashboard. If you're unable to access this information, I recommend reaching out to HR directly for assistance. They can provide specific details regarding your PTO entitlement and remaining balance."
+    //     },
+    //     {
+    //     "role": "user",
+    //     "content": "is remote work allowed?"
+    //     },
+    //     {
+    //     "role": "assistant",
+    //     "content": "Yes, remote work is allowed at Nexora Tech Solutions for eligible employees, as flexible work arrangements are available. However, specific eligibility criteria and guidelines may apply, so it's best to discuss the details with your manager or HR to understand the process and requirements for requesting remote work."
+    //     },
+    //     {
+    //     "role": "user",
+    //     "content": "do resignations require 2 weeks?"
+    //     },
+    //     {
+    //     "role": "assistant",
+    //     "content": "Yes, it is generally expected that employees provide a two-week notice period when resigning from their position. This allows for a smoother transition and gives the company time to manage the departure. However, it's always a good idea to check with your specific department or HR for any additional requirements or variations on this policy."
+    //     }
+    // ]
 
     return (
         <div className="bg-gray-900 text-white min-h-screen flex flex-col">

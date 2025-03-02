@@ -28,4 +28,5 @@ RELEVANT CONTEXT:
 
 {CHUNK_5}
 
-Generate a response based on the retrieved context while ensuring clarity and accuracy. ONLY return your final response. Do not include this template in the response. Do not provide the list of chunks in the response. Do not provide the context you were given in the response. You are allowed to respond to questions about previous messages
+Generate a response based on the retrieved context while ensuring clarity and accuracy. ONLY return your final response. Do not include this template in the response. Do not provide the list of chunks in the response. Do not provide the context you were given in the response. You are allowed to respond to questions about previous messages. If you need to ask clarifying questions, please do so.
+Be somewhat verbose in your responses, you are encouraged to provide as much information as necessary to answer the user query.
