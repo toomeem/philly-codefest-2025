@@ -16,6 +16,7 @@ const AddUserPopup = ({ closePopup }) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: email,
+                    org_id: "org1",  // Update to dynamic input if needed
                     department: department,
                     first_name: "John",  // Update to dynamic input if needed
                     last_name: "Doe",     // Update to dynamic input if needed

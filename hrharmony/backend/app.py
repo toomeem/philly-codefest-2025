@@ -4,11 +4,12 @@ import uuid
 from pprint import pprint
 
 import requests
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from helper_functions.edit_files import upload_file_to_s3
 from helper_functions.edit_users import (create_user_in_db, delete_user_in_db,
-                                         fetch_user_in_db, update_user_in_db, fetch_org_users_in_db)
+                                         fetch_org_users_in_db,
+                                         fetch_user_in_db, update_user_in_db)
 
 app = Flask(__name__)
 CORS(app)
@@ -48,11 +49,12 @@ def create_user():
   request_data = request.get_json()
   print(request_data)
   email = request_data["email"]
+  org_id = request_data["org_id"]
   department = request_data["department"]
   first_name = request_data["first_name"]
   last_name = request_data["last_name"]
   password = generate_password()
-  success = create_user_in_db(email, department, first_name, last_name, password)
+  success = create_user_in_db(email, org_id, department, first_name, last_name, password)
   print(success)
   return {"password": password, "success": success}, 200
 
@@ -64,8 +66,10 @@ def get_user():
   user = fetch_user_in_db(email, password)
   return {"user": user}
 
-@app.route("/org_users/<org_id>", methods=["GET"])
-def get_org_users(org_id):
+@app.route("/org_users", methods=["GET"])
+def get_org_users():
+  request_data = request.get_json()
+  org_id = request_data["org_id"]
   print(org_id)
   users_tuple = fetch_org_users_in_db(org_id)
   users = []
@@ -78,7 +82,7 @@ def get_org_users(org_id):
       "first_name": user[4],
       "last_name": user[5]
     })
-  return users, 200
+  return jsonify(users), 200
 
 @app.route("/user", methods=["PUT"])
 def update_user():

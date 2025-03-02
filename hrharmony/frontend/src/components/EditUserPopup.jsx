@@ -9,12 +9,13 @@ const EditUserPopup = ({ closePopup }) => {
         // Fetch users from the backend
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8080/org_users?org_id=org1", {
+                const response = await fetch("http://localhost:8080/org_users", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
                 const data = await response.json();
                 if (response.ok) {
+                    console.log("Users fetched successfully:", data.users);
                     setUsers(data.users);
                 } else {
                     console.error("Error fetching users:", data.error);
