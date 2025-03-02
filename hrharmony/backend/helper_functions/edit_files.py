@@ -115,3 +115,32 @@ def update_file_in_db(id, name=None, org_id=None, departments=None):
   cur.close()
   return True
 
+def delete_file_in_db(id):
+  conn = psycopg2.connect(
+    host=os.getenv("RDS_ENDPOINT"),
+    database="postgres",
+    user=os.getenv("RDS_USERNAME"),
+    password=os.getenv("RDS_PASSWORD"),
+    port="5432"
+  )
+  cur = conn.cursor()
+  cur.execute(f"DELETE FROM files WHERE id='{id}'")
+  conn.commit()
+  cur.close()
+  conn.close()
+  return True
+  
+def fetch_all_files():
+  conn = psycopg2.connect(
+    host=os.getenv("RDS_ENDPOINT"),
+    database="postgres",
+    user=os.getenv("RDS_USERNAME"),
+    password=os.getenv("RDS_PASSWORD"),
+    port="5432"
+  )
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM files")
+  files = cur.fetchall()
+  cur.close()
+  conn.close()
+  return files
