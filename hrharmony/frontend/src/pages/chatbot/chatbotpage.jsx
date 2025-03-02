@@ -17,16 +17,33 @@ const ChatbotPage = () => {
         setMessages(prevMessages => [...prevMessages, { sender, message }]);
     };
 
-    const updateChat = () => {
+    const updateChat = async () => {
         if (inputText.trim() !== '') {
-            addMessage(inputText, 'user');
-            setTimeout(() => {
-                addMessage(`You said: "${inputText}"`, 'bot');
-            }, 500);
+            const userMessage = inputText;
+            addMessage(userMessage, 'user');
             setInputText('');
+
+            try {
+                const response = await fetch("http://localhost:8080/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id: "4a85be08-8b60-46f1-a062-8ecf5b527c28",
+                        query: userMessage
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    addMessage(data.response, 'bot');
+                } else {
+                    addMessage("Error fetching response", 'bot');
+                }
+            } catch (error) {
+                addMessage("Server error, please try again later", 'bot');
+            }
         }
     };
-
     const startNewConversation = () => {
         setConversations([...conversations, `Conversation ${conversations.length + 1}`]);
         setMessages([]);

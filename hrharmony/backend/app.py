@@ -21,7 +21,7 @@ def generate_password():
 
 @app.route("/", methods=["GET"])
 def home():
-  return "HR Harmony"
+  return "Hello, World!"
 
 @app.route("/file", methods=["POST"])
 def upload_file():

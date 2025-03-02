@@ -44,7 +44,7 @@ def addFile(fileName):
     length_function = len,
     is_separator_regex= False
   )
-  with open("Databases/" + fileName) as file:
+  with open("databases/" + fileName) as file:
     text = file.read() # reads file and save as string
   #split string into a list of strings
   chunks = text_splitter.create_documents([text])
@@ -89,7 +89,7 @@ def searchEmbedding(query):
     length_function=len,
     is_separator_regex=False
   )
-  file_path = f"Databases/{filename}"
+  file_path = f"databases/{filename}"
   # Check if the file exists before reading
   if not os.path.exists(file_path):
     return(f"File {filename} does not exist.")
@@ -133,3 +133,8 @@ def clearAllEntries():
   collection.delete_many({})
 
   print("All documents deleted successfully.")
+
+clearAllEntries()
+addFile("Nexora_HR_Regulations_2.txt")
+addFile("Nexora_HR_Regulations.txt")
+addFile("Vertex_HR_Regulations.txt")

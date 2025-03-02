@@ -16,8 +16,6 @@ MarkupSafe==3.0.2
 numpy==1.26.4
 openai==1.65.2
 pip==25.0.1
-pydantic==2.10.6
-pydantic-core==2.27.2
 psycopg2==2.9.10
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1

@@ -15,6 +15,18 @@
     {
       "role": "assistant",
       "content": "I'm here to assist you with HR-related inquiries. For questions outside of HR, please consult a different source or feel free to ask me about company policies or employee benefits."
+    },
+    {
+      "role": "system",
+      "content": "Here are some relevant chunks from the database:\n\n'''## 1. Employee Code of Conduct'''\n'''Employees are expected to maintain professionalism, integrity, and respect in all interactions. Adherence to ethical behavior, a business-casual dress code, and workplace etiquette is required.'''\n'''## 2. Attendance and Punctuality Policy\nEmployees must adhere to their designated work schedules, report absences promptly, and comply with leave request procedures.'''\n'''## 3. Equal Employment Opportunity Policy\nNexora Tech Solutions is committed to a diverse and inclusive workplace, ensuring equal opportunities regardless of race, gender, religion, or disability.'''\n'''## 4. Harassment and Discrimination Policy'''"
+    },
+    {
+      "role": "user",
+      "content": "whats my pto"
+    },
+    {
+      "role": "assistant",
+      "content": "To provide you with accurate information regarding your Paid Time Off (PTO), I would need to know your specific company policy on PTO or you could check directly with your HR representative. Typically, PTO accumulates based on your length of service and the company's PTO policy. If you have access to an employee portal, you may also find your balance there. If you still have questions, I recommend contacting HR directly for personalized assistance."
     }
   ]
 }
