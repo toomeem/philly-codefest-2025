@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1d1f22;
+            color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar Styles */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav .logo {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Full-Screen Admin Panel */
+        .admin-container {
+            width: 100vw;
+            height: calc(100vh - 50px); /* Adjusted height to account for the navbar */
+            background: #25282b;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 20px; /* To create space below navbar */
+        }
+
+        .admin-header {
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-header h2 {
+            color: #ffcc00;
+            font-size: 2rem;
+        }
+
+        .profile-icon {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Square Buttons */
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            width: 80%;
+        }
+
+        .admin-btn {
+            background: #3b3f45;
+            color: white;
+            border: none;
+            padding: 50px;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            height: 200px;
+        }
+
+        .admin-btn i {
+            font-size: 2.5rem;
+        }
+
+        .admin-btn:hover {
+            background: #ffcc00;
+            color: black;
+        }
+
+        /* Popups */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #25282b;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+
+        .popup h3 {
+            margin-top: 0;
+            color: #ffcc00;
+        }
+
+        .popup input, .popup textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: #3b3f45;
+            color: white;
+        }
+
+        .popup button {
+            background: #ffcc00;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .close-btn {
+            background: red !important;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-btn {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li class="logo">HR Harmony</li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="chatbot.html">Chat Bot</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container">
+        <div class="admin-header">
+            <h2>Welcome, Admin</h2>
+            <i class="fas fa-user-circle profile-icon"></i>
+        </div>
+
+        <div class="admin-actions">
+            <button class="admin-btn" onclick="openPopup('addDocPopup')">
+                <i class="fas fa-file-upload"></i>
+                Add Document
+            </button>
+            <button class="admin-btn" onclick="openPopup('editDocPopup')">
+                <i class="fas fa-edit"></i>
+                Edit Document
+            </button>
+            <button class="admin-btn" onclick="openPopup('addUserPopup')">
+                <i class="fas fa-user-plus"></i>
+                Add User
+            </button>
+            <button class="admin-btn" onclick="openPopup('editUserPopup')">
+                <i class="fas fa-user-cog"></i>
+                Edit User
+            </button>
+        </div>
+    </div>
+
+    <!-- Popups -->
+    <div id="addDocPopup" class="popup">
+        <h3>Add Document</h3>
+        <input type="text" placeholder="Document Title">
+        <textarea placeholder="Document Content"></textarea>
+        <button>Submit</button>
+        <button class="close-btn" onclick="closePopup('addDocPopup')">Close</button>
+    </div>
+
+    <div id="editDocPopup" class="popup">
+        <h3>Edit Document</h3>
+        <input type="text" placeholder="Document Title">
+        <textarea placeholder="Edit Content"></textarea>
+        <button>Save Changes</button>
+        <button class="close-btn" onclick="closePopup('editDocPopup')">Close</button>
+    </div>
+
+    <div id="addUserPopup" class="popup">
+        <h3>Add User</h3>
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email">
+        <button>Add User</button>
+        <button class="close-btn" onclick="closePopup('addUserPopup')">Close</button>
+    </div>
+
+    <div id="editUserPopup" class="popup">
+        <h3>Edit User</h3>
+        <input type="text" placeholder="User Name">
+        <input type="email" placeholder="User Email">
+        <button>Save Changes</button>
+        <button class="close-btn" onclick="closePopup('editUserPopup')">Close</button>
+    </div>
+
+    <script>
+        function openPopup(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function closePopup(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
