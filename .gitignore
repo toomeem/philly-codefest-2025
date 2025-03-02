@@ -2,3 +2,4 @@ test_request.py
 hrharmony/backend/.env
 hrharmony/backend/helper_functions/__pycache__/
 hrharmony/backend/Databases/.env
+hrharmony/backend/helper_functions/.env

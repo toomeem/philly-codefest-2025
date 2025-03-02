@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from astrapy import DataAPIClient
 
+load_dotenv()
+
 # declare local constants
 COLLECTION_NAME = "hr_document"
 DATABASE_URL = "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
@@ -46,7 +48,7 @@ def addFile(fileName):
     )
 
     #open file and set to read
-    with open('Backend/Databases/Documents/' + fileName, 'r', encoding="utf-8") as file:
+    with open('backend/Databases/' + fileName, 'r', encoding="utf-8") as file:
       text = file.read() # reads file and save as string
     #split string into a list of strings
     chunks = text_splitter.create_documents([text])
@@ -96,7 +98,7 @@ def searchEmbedding(query):
         is_separator_regex=False
     )
 
-    file_path = f"Backend/Databases/Documents/{filename}"
+    file_path = f"backend/Databases/{filename}"
 
     # Check if the file exists before reading
     if not os.path.exists(file_path):
@@ -114,7 +116,7 @@ def searchEmbedding(query):
         return
 
     # Print the chunk based on the index
-    return chunks[chunk_index].page_content
+    return chunks[:5]
 
 
 def deleteTableEntry(documentId):
@@ -122,11 +124,9 @@ def deleteTableEntry(documentId):
 
   # Replace with your Astra DB credentials
   DATASTAX_KEY = os.getenv('DATASTAX_KEY')
-  ASTRA_DB_APPLICATION_TOKEN = DATASTAX_KEY  # Ensure this is set correctly
- 
-
+  
   # Initialize DataAPIClient
-  client = DataAPIClient(DATABASE_URL)
+  client = DataAPIClient(DATASTAX_KEY)
   db = client.get_database_by_api_endpoint(DATABASE_URL)
   collection = db.get_collection(COLLECTION_NAME)  # Get the collection (table)
 
@@ -148,3 +148,5 @@ def clearAllEntries():
   collection.delete_many({})
 
   print("All documents deleted successfully.")
+
+
