@@ -64,11 +64,10 @@ def get_user():
   user = fetch_user_in_db(email, password)
   return {"user": user}
 
-@app.route("/org_users", methods=["GET"])
-def get_org_users():
-  request_data = request.get_json()
-  organization_id = request_data["organization_id"]
-  users_tuple = fetch_org_users_in_db(organization_id)
+@app.route("/org_users/<org_id>", methods=["GET"])
+def get_org_users(org_id):
+  print(org_id)
+  users_tuple = fetch_org_users_in_db(org_id)
   users = []
   for user in users_tuple:
     users.append({
@@ -79,7 +78,7 @@ def get_org_users():
       "first_name": user[4],
       "last_name": user[5]
     })
-  return
+  return users, 200
 
 @app.route("/user", methods=["PUT"])
 def update_user():

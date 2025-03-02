@@ -9,7 +9,10 @@ const EditUserPopup = ({ closePopup }) => {
         // Fetch users from the backend
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:8080/users");
+                const response = await fetch("http://localhost:8080/org_users?org_id=org1", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
                 const data = await response.json();
                 if (response.ok) {
                     setUsers(data.users);
