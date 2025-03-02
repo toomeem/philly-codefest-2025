@@ -1,8 +1,9 @@
 import random
 import string
+from pprint import pprint
 
-import boto3
 from Databases.Src.postgresql import create_user as create_user_in_db
+from Databases.Src.postgresql import fetch_user
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -28,6 +29,7 @@ def upload_file():
 @app.route("/user", methods=["POST"])
 def create_user():
   request_data = request.get_json()
+  pprint(request_data)
   email = request_data["email"]
   department = request_data["department"]
   first_name = request_data["first_name"]
@@ -36,7 +38,13 @@ def create_user():
   create_user_in_db(email, department, first_name, last_name, password)
   return {"password": password}
 
-
+@app.route("/user", methods=["GET"])
+def get_user():
+  request_data = request.get_json()
+  email = request_data["email"]
+  password = request_data["password"]
+  user = fetch_user(email, password)
+  return {"user": user}
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080)
