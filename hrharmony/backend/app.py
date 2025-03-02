@@ -10,6 +10,7 @@ import helper_functions.edit_files
 import helper_functions.edit_users
 import helper_functions.edit_orgs
 import helper_functions.query
+import helper_functions.vector_database
 app = Flask(__name__)
 CORS(app)
 
@@ -41,6 +42,7 @@ def upload_file():
   response = helper_functions.edit_files.upload_file_to_s3(organization_id, file_id)
   if response["success"]:
     helper_functions.edit_files.create_file_in_db(file_id, file_name, organization_id, departments)
+    helper_functions.vector_database.addFile(file_name)
   return response
 
 @app.route("/file", methods=["DELETE"])
