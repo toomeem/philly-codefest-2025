@@ -39,7 +39,8 @@ def upload_file():
   departments = request.form.get("departments", "")
 
   response = helper_functions.edit_files.upload_file_to_s3(organization_id, file_id)
-
+  if response["success"]:
+    helper_functions.edit_files.create_file_in_db(file_id, file_name, organization_id, departments)
   return response
 
 
