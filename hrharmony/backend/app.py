@@ -101,7 +101,10 @@ def send_message():
   request_data = request.get_json()
   user_id = request_data["user_id"]
   query = request_data["query"]
-  user_id = helper_functions.edit_users.fetch_user_in_db(id=user_id)
+  user = helper_functions.edit_users.fetch_user_in_db(id=user_id)
+  if user is None:
+    return {"error": "User not found"}, 404
+  user_id = user[0]
   response = helper_functions.query.get_bot_response(user_id, query)
   return {"response": response}
 

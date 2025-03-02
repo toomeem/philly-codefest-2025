@@ -8,7 +8,6 @@ from openai import OpenAI
 load_dotenv()
 
 def get_bot_response(user_id, query, chat_messages=None):
-
   paths = ["databases/chat_log.json", "databases/system_prompt.txt", "databases/user_query_template.txt"]
   for path in paths:
     if not os.path.exists(path):
@@ -56,8 +55,12 @@ def get_bot_response(user_id, query, chat_messages=None):
   # update last message to remove chunk content
   chat_messages[-1]["content"] = query
   chat_messages.append({"role": "assistant", "content": response})
-  all_messages[user_id] = chat_messages
+  all_messages[user_id] = list(chat_messages)
   # Save the updated chat log back to the JSON file
+  for i in all_messages.keys():
+    all_messages[i] = list(all_messages[i])
+    if isinstance(all_messages[i], tuple):
+      return "all_messages[" + str(i) + "] is a tuple"
   with open(chat_log_path, "w") as f:
     json.dump(all_messages, f, indent=2)
 
