@@ -1,11 +1,14 @@
 import random
 import string
+import uuid
 from pprint import pprint
 
+from backend.helper_functions.edit_files import upload_file_to_s3
+from backend.helper_functions.edit_users import (create_user_in_db,
+                                                 delete_user_in_db, fetch_user,
+                                                 update_user_in_db)
 from flask import Flask, request
 
-from backend.helper_functions.edit_users import (fetch_user,update_user_in_db, create_user_in_db, delete_user_in_db)
-from backend.helper_functions.edit_files import upload_file_to_s3
 app = Flask(__name__)
 
 
@@ -21,10 +24,17 @@ def home():
 @app.route("/file", methods=["POST"])
 def upload_file():
   file = request.files["file"]
+  file_id = str(uuid.uuid4())
+  file.save(f"tmp/{file_id}")
+
   file_name = file.filename
-  organization_id = request.form["organization_id"]
-  file.save(f"tmp/{file_name}")
-  return upload_file_to_s3(organization_id, file_name)
+  request_data = request.json()
+  organization_id = request["organization_id"]
+  departments = request_data["departments"]
+
+  response = upload_file_to_s3(organization_id, file_id)
+  
+  return response
 
 
 @app.route("/user", methods=["POST"])
