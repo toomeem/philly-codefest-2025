@@ -9,7 +9,7 @@ const EditUserPopup = ({ closePopup }) => {
         // Fetch users from the backend
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:5000/users");
+                const response = await fetch("http://localhost:8080/users");
                 const data = await response.json();
                 if (response.ok) {
                     setUsers(data.users);
@@ -28,7 +28,7 @@ const EditUserPopup = ({ closePopup }) => {
         if (!selectedUser || !newDepartment) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/user/${selectedUser.id}`, {
+            const response = await fetch(`http://localhost:8080/user/${selectedUser.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ department: newDepartment }),
@@ -53,7 +53,7 @@ const EditUserPopup = ({ closePopup }) => {
 
     const handleRemoveUser = async (id) => {
         try {
-            const response = await fetch(`http://localhost:5000/user/${id}`, {
+            const response = await fetch(`http://localhost:8080/user/${id}`, {
                 method: "DELETE",
             });
 

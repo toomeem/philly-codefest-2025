@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def create_user_in_db(email, department, first_name, last_name, password):
+def create_user_in_db(email, org_id, department, first_name, last_name, password):
   id = str(uuid.uuid4())
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
@@ -17,12 +17,27 @@ def create_user_in_db(email, department, first_name, last_name, password):
     port="5432"
   )
   cur = conn.cursor()
-  cur.execute(f'''INSERT INTO users (id, email, department, first_name, last_name, password) VALUES
-  ('{id}', '{email}', '{department}', '{first_name}', '{last_name}', '{password}')''')
+  cur.execute(f'''INSERT INTO users (id, email, org_id, department, first_name, last_name, password) VALUES
+  ('{id}', '{email}', '{org_id}', '{department}', '{first_name}', '{last_name}', '{password}')''')
   conn.commit()
   cur.close()
   conn.close()
   return True
+
+def fetch_org_users_in_db(org_id):
+  conn = psycopg2.connect(
+    host=os.getenv("RDS_ENDPOINT"),
+    database="postgres",
+    user=os.getenv("RDS_USERNAME"),
+    password=os.getenv("RDS_PASSWORD"),
+    port="5432"
+  )
+  cur = conn.cursor()
+  cur.execute(f"SELECT * FROM users WHERE org_id='{org_id}'")
+  users = cur.fetchall()
+  cur.close()
+  conn.close()
+  return users
 
 def fetch_user_in_db(id=None, email=None, password=None):
   conn = psycopg2.connect(
@@ -113,6 +128,7 @@ def create_db():
   cur = conn.cursor()
   cur.execute('''CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(255) PRIMARY KEY,
+    org_id VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     department VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,

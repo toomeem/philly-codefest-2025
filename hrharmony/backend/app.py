@@ -3,13 +3,15 @@ import string
 import uuid
 from pprint import pprint
 
+import requests
 from flask import Flask, request
+from flask_cors import CORS
 from helper_functions.edit_files import upload_file_to_s3
 from helper_functions.edit_users import (create_user_in_db, delete_user_in_db,
-                                         fetch_user_in_db, update_user_in_db)
+                                         fetch_user_in_db, update_user_in_db, fetch_org_users_in_db)
 
 app = Flask(__name__)
-
+CORS(app)
 
 def generate_password():
   characters = string.ascii_letters + string.digits + string.punctuation
@@ -44,14 +46,15 @@ def upload_file():
 @app.route("/user", methods=["POST"])
 def create_user():
   request_data = request.get_json()
-  pprint(request_data)
+  print(request_data)
   email = request_data["email"]
   department = request_data["department"]
   first_name = request_data["first_name"]
   last_name = request_data["last_name"]
   password = generate_password()
-  create_user_in_db(email, department, first_name, last_name, password)
-  return {"password": password}
+  success = create_user_in_db(email, department, first_name, last_name, password)
+  print(success)
+  return {"password": password, "success": success}, 200
 
 @app.route("/user", methods=["GET"])
 def get_user():
@@ -60,6 +63,23 @@ def get_user():
   password = request_data["password"]
   user = fetch_user_in_db(email, password)
   return {"user": user}
+
+@app.route("/org_users", methods=["GET"])
+def get_org_users():
+  request_data = request.get_json()
+  organization_id = request_data["organization_id"]
+  users_tuple = fetch_org_users_in_db(organization_id)
+  users = []
+  for user in users_tuple:
+    users.append({
+      "id": user[0],
+      "org_id": user[1],
+      "email": user[2],
+      "department": user[3],
+      "first_name": user[4],
+      "last_name": user[5]
+    })
+  return
 
 @app.route("/user", methods=["PUT"])
 def update_user():

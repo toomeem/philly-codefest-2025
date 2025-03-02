@@ -11,15 +11,16 @@ const AddUserPopup = ({ closePopup }) => {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/user", {
+            const response = await fetch("http://localhost:8080/user", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    email,
-                    department,
+                    email: email,
+                    department: department,
                     first_name: "John",  // Update to dynamic input if needed
                     last_name: "Doe",     // Update to dynamic input if needed
                 }),
+                mode: 'cors'
             });
 
             const data = await response.json();
