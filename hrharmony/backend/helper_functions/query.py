@@ -8,10 +8,6 @@ from openai import OpenAI
 load_dotenv()
 
 def get_bot_response(user_id, query, chat_messages=None):
-  paths = ["databases/chat_log.json", "databases/system_prompt.txt", "databases/user_query_template.txt"]
-  for path in paths:
-    if not os.path.exists(path):
-      return("this dir:" + path + ":" + str(os.listdir("databases")))
   chat_log_path = "databases/chat_log.json"
   try:
     with open("databases/system_prompt.txt") as file:
