@@ -82,9 +82,8 @@ def searchEmbedding(query):
 
     # Find a document
     result = collection.find_one(
-        {},
-        projection=["_title", "$vector"],
-        sort={"$vectorize": query}
+    {},  # Adjust your query to match the data you're looking for
+    sort={"$vectorize": "PTO"}
     )
 
     # Check if result is found
@@ -94,7 +93,7 @@ def searchEmbedding(query):
 
     # Constant to hold the length of each chunk
     CHUNK_LEN = 200
-    title = result.get("_title", None)
+    title = result["title"]
 
     if not title:
         print("No '_title' found in the result.")
@@ -175,8 +174,7 @@ def clearAllEntries():
 
 
 
-#clearAllEntries()
-#addFile("Nexora_HR_Regulations.txt")
-searchEmbedding("PTO")
+
+
 
 
