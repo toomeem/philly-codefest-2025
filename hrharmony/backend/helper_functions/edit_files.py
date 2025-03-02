@@ -37,4 +37,3 @@ def delete_file(organization_id, file_id):
   save_name = f"{organization_id}/{file_id}"
   response = s3_client.delete_object(Bucket=S3_BUCKET_NAME, Key=save_name)
   return {"success": bool(response)}
-
