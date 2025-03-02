@@ -8,7 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
 # Load environment variables
-load_dotenv()
+#oad_dotenv()
 
 # Debug: Check if API keys are loaded
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -135,9 +135,7 @@ def searchEmbedding(query):
     # Print the chunk based on the index
     print(chunks[chunk_index])
 
-
-
-
+#function to delete specific table entry
 def deleteTableEntry(documentId):
   from astrapy import DataAPIClient
 
@@ -155,6 +153,7 @@ def deleteTableEntry(documentId):
   
   print(f"Document with ID {documentId} deleted successfully.")
 
+#function to clear all entries from the data base
 def clearAllEntries():
   from astrapy import DataAPIClient
 
@@ -171,10 +170,3 @@ def clearAllEntries():
   collection.delete_many({})
   
   print("All documents deleted successfully.")
-
-
-
-
-
-
-
