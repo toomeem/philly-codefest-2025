@@ -1,8 +1,12 @@
 import random
 import string
+import uuid
+from pprint import pprint
 
-import boto3
-from Databases.Src.postgresql import create_user as create_user_in_db
+from backend.helper_functions.edit_files import upload_file_to_s3
+from backend.helper_functions.edit_users import (create_user_in_db,
+                                                 delete_user_in_db, fetch_user,
+                                                 update_user_in_db)
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -17,17 +21,26 @@ def generate_password():
 def home():
   return "HR Harmony"
 
-@app.route("/upload_file", methods=["POST"])
+@app.route("/file", methods=["POST"])
 def upload_file():
   file = request.files["file"]
+  file_id = str(uuid.uuid4())
+  file.save(f"tmp/{file_id}")
 
-  file.save(f"uploads/{file.filename}")
-  return "200"
+  file_name = file.filename
+  request_data = request.json()
+  organization_id = request["organization_id"]
+  departments = request_data["departments"]
+
+  response = upload_file_to_s3(organization_id, file_id)
+  
+  return response
 
 
 @app.route("/user", methods=["POST"])
 def create_user():
   request_data = request.get_json()
+  pprint(request_data)
   email = request_data["email"]
   department = request_data["department"]
   first_name = request_data["first_name"]
@@ -36,7 +49,27 @@ def create_user():
   create_user_in_db(email, department, first_name, last_name, password)
   return {"password": password}
 
+@app.route("/user", methods=["GET"])
+def get_user():
+  request_data = request.get_json()
+  email = request_data["email"]
+  password = request_data["password"]
+  user = fetch_user(email, password)
+  return {"user": user}
 
+@app.route("/user", methods=["PUT"])
+def update_user():
+  request_data = request.get_json()
+  id = request_data["id"]
+  success = update_user_in_db(id, **request_data)
+  return {"success": success}
+
+@app.route("/user", methods=["DELETE"])
+def delete_user():
+  request_data = request.get_json()
+  id = request_data["id"]
+  success = delete_user_in_db(id)
+  return {"success": success}
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080)

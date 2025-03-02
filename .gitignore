@@ -1,10 +1,2 @@
-Backend\Databases\Src\.env
-Backend/API/Src/.env
-Backend\API\Src\.env
-Backend\Databases\Src\.env
-Backend/API/Src/.env
-.gitignore
-Backend/Databases/Src/.env
-hrharmony/backend/API/Src/.env
-hrharmony/backend/Databases/Src/.env
-hrharmony/backend/Databases/Src/__pycache__/postgresql.cpython-310.pyc
+test_request.py
+hrharmony/backend/.env
