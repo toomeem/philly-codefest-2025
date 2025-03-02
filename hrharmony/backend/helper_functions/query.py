@@ -1,7 +1,7 @@
 import json
 import os
 
-import vector_database
+import helper_functions.vector_database
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -24,7 +24,7 @@ def get_bot_response(user_id, query, chat_messages=None):
   else:
     chat_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
   # Retrieve relevant chunks from vector database
-  chunks = vector_database.searchEmbedding(query)
+  chunks = helper_functions.vector_database.searchEmbedding(query)
   # Read the user query template
   with open('backend/helper_functions/user_query_template.txt') as file:
     user_prompt = file.read()
@@ -36,18 +36,16 @@ def get_bot_response(user_id, query, chat_messages=None):
   client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
   )
-
   # Add the user query to the chat history
   chat_messages.append({"role": "user", "content": user_prompt})
-
   # Request completion from GPT-4
   completion = client.chat.completions.create(
-      model="gpt-4o-mini",
-      messages=chat_messages
+    model="gpt-4o-mini",
+    messages=chat_messages
   )
   # Extract the response
   response = completion.choices[0].message.content
-  # update last message so that its only the user query
+  # update last message to remove chunk content
   chat_messages[-1]["content"] = query
   chat_messages.append({"role": "assistant", "content": response})
   all_messages[user_id] = chat_messages
@@ -56,7 +54,3 @@ def get_bot_response(user_id, query, chat_messages=None):
     json.dump(all_messages, f, indent=2)
 
   return response
-
-
-
-get_bot_response("what is my hourly pay")

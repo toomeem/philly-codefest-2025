@@ -6,11 +6,9 @@ from pprint import pprint
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from helper_functions.edit_files import upload_file_to_s3
-from helper_functions.edit_users import (create_user_in_db, delete_user_in_db,
-                                         fetch_org_users_in_db,
-                                         fetch_user_in_db, update_user_in_db)
-
+import helper_functions.edit_files
+import helper_functions.edit_users
+import helper_functions.query
 app = Flask(__name__)
 CORS(app)
 
@@ -39,7 +37,7 @@ def upload_file():
   organization_id = request.form.get("organization_id", "")
   departments = request.form.get("departments", "")
 
-  response = upload_file_to_s3(organization_id, file_id)
+  response = helper_functions.edit_files.upload_file_to_s3(organization_id, file_id)
 
   return response
 
@@ -54,7 +52,7 @@ def create_user():
   first_name = request_data["first_name"]
   last_name = request_data["last_name"]
   password = generate_password()
-  success = create_user_in_db(email, org_id, department, first_name, last_name, password)
+  success = helper_functions.edit_users.create_user_in_db(email, org_id, department, first_name, last_name, password)
   print(success)
   return {"password": password, "success": success}, 200
 
@@ -63,7 +61,7 @@ def get_user():
   request_data = request.get_json()
   email = request_data["email"]
   password = request_data["password"]
-  user = fetch_user_in_db(email, password)
+  user = helper_functions.edit_users.fetch_user_in_db(email, password)
   return {"user": user}
 
 @app.route("/org_users", methods=["GET"])
@@ -71,7 +69,7 @@ def get_org_users():
   request_data = request.get_json()
   org_id = request_data["org_id"]
   print(org_id)
-  users_tuple = fetch_org_users_in_db(org_id)
+  users_tuple = helper_functions.edit_users.fetch_org_users_in_db(org_id)
   users = []
   for user in users_tuple:
     users.append({
@@ -88,23 +86,24 @@ def get_org_users():
 def update_user():
   request_data = request.get_json()
   id = request_data["id"]
-  success = update_user_in_db(id, **request_data)
+  success = helper_functions.edit_users.update_user_in_db(id, **request_data)
   return {"success": success}
 
 @app.route("/user", methods=["DELETE"])
 def delete_user():
   request_data = request.get_json()
   id = request_data["id"]
-  success = delete_user_in_db(id)
+  success = helper_functions.edit_users.delete_user_in_db(id)
   return {"success": success}
 
 @app.route("/chat", methods=["POST"])
 def send_message():
   request_data = request.get_json()
-  id = request_data["id"]
+  user_id = request_data["user_id"]
   query = request_data["query"]
-  user = fetch_user_in_db(id=id)
-  
+  user_id = helper_functions.edit_users.fetch_user_in_db(id=user_id)
+  response = helper_functions.query.get_bot_response(user_id, query)
+  return {"response": response}
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080)

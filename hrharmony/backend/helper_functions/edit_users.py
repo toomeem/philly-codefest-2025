@@ -1,5 +1,6 @@
 import os
 import uuid
+from pprint import pprint
 
 import psycopg2
 from dotenv import load_dotenv
@@ -138,3 +139,18 @@ def create_db():
   conn.commit()
   cur.close()
   conn.close()
+
+def __fetch_all_users():
+  conn = psycopg2.connect(
+    host=os.getenv("RDS_ENDPOINT"),
+    database="postgres",
+    user=os.getenv("RDS_USERNAME"),
+    password=os.getenv("RDS_PASSWORD"),
+    port="5432"
+  )
+  cur = conn.cursor()
+  cur.execute("SELECT * FROM users")
+  users = cur.fetchall()
+  cur.close()
+  conn.close()
+  return users

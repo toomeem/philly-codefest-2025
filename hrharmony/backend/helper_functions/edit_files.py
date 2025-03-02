@@ -1,17 +1,18 @@
 import os
 import uuid
 
+import psycopg2
 import boto3
 from dotenv import load_dotenv
 
 load_dotenv()
 
-S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
-AWS_REGION = os.getenv("AWS_REGION")
-IAM_PUBLIC_KEY = os.getenv("IAM_PUBLIC_KEY")
-IAM_PRIVATE_KEY = os.getenv("IAM_PRIVATE_KEY")
 
 def upload_file_to_s3(organization_id, file_name):
+  S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
+  AWS_REGION = os.getenv("AWS_REGION")
+  IAM_PUBLIC_KEY = os.getenv("IAM_PUBLIC_KEY")
+  IAM_PRIVATE_KEY = os.getenv("IAM_PRIVATE_KEY")
   s3_client = boto3.client(
     service_name="s3",
     region_name=AWS_REGION,
@@ -26,7 +27,11 @@ def upload_file_to_s3(organization_id, file_name):
     return {"success": False}
   return {"success": True, "id": id}
 
-def delete_file(organization_id, file_id):
+def delete_file_from_s3(organization_id, file_id):
+  S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
+  AWS_REGION = os.getenv("AWS_REGION")
+  IAM_PUBLIC_KEY = os.getenv("IAM_PUBLIC_KEY")
+  IAM_PRIVATE_KEY = os.getenv("IAM_PRIVATE_KEY")
   s3_client = boto3.client(
     service_name="s3",
     region_name=AWS_REGION,
@@ -37,3 +42,4 @@ def delete_file(organization_id, file_id):
   save_name = f"{organization_id}/{file_id}"
   response = s3_client.delete_object(Bucket=S3_BUCKET_NAME, Key=save_name)
   return {"success": bool(response)}
+
