@@ -4,13 +4,35 @@ const AddUserPopup = ({ closePopup }) => {
     const [email, setEmail] = useState("");
     const [department, setDepartment] = useState("");
 
-    const handleAddUser = () => {
+    const handleAddUser = async () => {
         if (!email || !department) {
             alert("Please enter an email and select a department.");
             return;
         }
-        console.log("Adding user:", email, "to department:", department);
-        closePopup();
+
+        try {
+            const response = await fetch("http://localhost:5000/user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    department,
+                    first_name: "John",  // Update to dynamic input if needed
+                    last_name: "Doe",     // Update to dynamic input if needed
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(`User created! Temporary password: ${data.password}`);
+                closePopup();
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+        } catch (error) {
+            console.error("Error creating user:", error);
+            alert("Failed to create user.");
+        }
     };
 
     return (
@@ -31,23 +53,16 @@ const AddUserPopup = ({ closePopup }) => {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                 >
-                    <option value="" disabled selected>Select Department</option>
+                    <option value="" disabled>Select Department</option>
                     <option value="HR">HR</option>
                     <option value="IT">IT</option>
                 </select>
 
-                {/* Properly Aligned Buttons */}
                 <div className="modal-action flex justify-between gap-2">
-                    <button
-                        className="btn btn-primary w-1/2"
-                        onClick={handleAddUser}
-                    >
+                    <button className="btn btn-primary w-1/2" onClick={handleAddUser}>
                         Create Account
                     </button>
-                    <button
-                        className="btn btn-error w-1/2"
-                        onClick={closePopup}
-                    >
+                    <button className="btn btn-error w-1/2" onClick={closePopup}>
                         Close
                     </button>
                 </div>
