@@ -38,4 +38,3 @@ def delete_file(organization_id, file_id):
   response = s3_client.delete_object(Bucket=S3_BUCKET_NAME, Key=save_name)
   return {"success": bool(response)}
 
-upload_file_to_s3("../README.md")

@@ -3,11 +3,10 @@ import string
 import uuid
 from pprint import pprint
 
-from backend.helper_functions.edit_files import upload_file_to_s3
-from backend.helper_functions.edit_users import (create_user_in_db,
-                                                 delete_user_in_db, fetch_user,
-                                                 update_user_in_db)
 from flask import Flask, request
+from helper_functions.edit_files import upload_file_to_s3
+from helper_functions.edit_users import (create_user_in_db, delete_user_in_db,
+                                         fetch_user_in_db, update_user_in_db)
 
 app = Flask(__name__)
 
@@ -23,17 +22,22 @@ def home():
 
 @app.route("/file", methods=["POST"])
 def upload_file():
+  if 'file' not in request.files:
+    return "No file part", 400
+
   file = request.files["file"]
+  if file.filename == '':
+    return "No selected file", 400
+
   file_id = str(uuid.uuid4())
   file.save(f"tmp/{file_id}")
 
   file_name = file.filename
-  request_data = request.json()
-  organization_id = request["organization_id"]
-  departments = request_data["departments"]
+  organization_id = request.form.get("organization_id", "")
+  departments = request.form.get("departments", "")
 
   response = upload_file_to_s3(organization_id, file_id)
-  
+
   return response
 
 
@@ -54,7 +58,7 @@ def get_user():
   request_data = request.get_json()
   email = request_data["email"]
   password = request_data["password"]
-  user = fetch_user(email, password)
+  user = fetch_user_in_db(email, password)
   return {"user": user}
 
 @app.route("/user", methods=["PUT"])

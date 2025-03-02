@@ -22,11 +22,11 @@ def createEmbedding(phrase):
     return response
 
 
+if __name__ == "__main__":
+  # Initialize the client
+  client = DataAPIClient(DATASTAX_KEY)
+  db = client.get_database_by_api_endpoint(
+    "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
+  )
 
-# Initialize the client
-client = DataAPIClient(DATASTAX_KEY)
-db = client.get_database_by_api_endpoint(
-  "https://c092bc40-37e0-425d-a7e6-ffc06427de9e-us-east-2.apps.astra.datastax.com"
-)
-
-print(f"Connected to Astra DB: {db.list_collection_names()}")
+  print(f"Connected to Astra DB: {db.list_collection_names()}")
