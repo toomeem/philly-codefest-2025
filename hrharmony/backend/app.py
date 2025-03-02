@@ -8,6 +8,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import helper_functions.edit_files
 import helper_functions.edit_users
+import helper_functions.edit_orgs
 import helper_functions.query
 app = Flask(__name__)
 CORS(app)
@@ -94,6 +95,41 @@ def delete_user():
   request_data = request.get_json()
   id = request_data["id"]
   success = helper_functions.edit_users.delete_user_in_db(id)
+  return {"success": success}
+
+
+@app.route("/org", methods=["POST"])
+def create_org():
+  request_data = request.get_json()
+  print(request_data)
+  orgid = request_data["orgid"]
+  name = request_data["name"]
+  if"admin" in request_data.keys():
+    admin = request_data["admin"]
+  else:
+    admin = None
+  success = helper_functions.edit_users.create_user_in_db(orgid,name,admin)
+  print(success)
+
+@app.route("/org", methods=["GET"])
+def get_org():
+  request_data = request.get_json()
+  id = request_data["orgid"]
+  org = helper_functions.edit_orgs.fetch_org_in_db(id)
+  return {"user": org}
+
+@app.route("/org", methods=["PUT"])
+def update_org():
+  request_data = request.get_json()
+  id = request_data["orgid"]
+  success = helper_functions.edit_orgs.update_org_in_db(id, **request_data)
+  return {"success": success}
+
+@app.route("/org", methods=["DELETE"])
+def delete_org():
+  request_data = request.get_json()
+  id = request_data["orgid"]
+  success = helper_functions.edit_orgs.delete_org_in_db(id)
   return {"success": success}
 
 @app.route("/chat", methods=["POST"])

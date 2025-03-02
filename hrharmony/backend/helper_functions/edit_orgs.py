@@ -20,7 +20,7 @@ def create_org_in_db(orgid, name, admin=None ):
   cur.close()
   conn.close()
   return True
-
+  
 
 def fetch_org_in_db(id=None, email=None, password=None):
   conn = psycopg2.connect(
@@ -30,6 +30,17 @@ def fetch_org_in_db(id=None, email=None, password=None):
     password=os.getenv("RDS_PASSWORD"),
     port="5432"
   )
+  cur = conn.cursor()
+  if id:
+    cur.execute(f"SELECT * FROM orgs WHERE id='{id}'")
+  else:
+    cur.close()
+    conn.close()
+    return
+  user = cur.fetchone()
+  cur.close()
+  conn.close()
+  return user
 
 
 def update_org_in_db(id, name= None, admin=None):

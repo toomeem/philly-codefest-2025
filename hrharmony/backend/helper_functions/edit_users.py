@@ -54,6 +54,8 @@ def fetch_user_in_db(id=None, email=None, password=None):
   elif email and password:
     cur.execute(f"SELECT * FROM users WHERE email='{email}' AND password='{password}'")
   else:
+    cur.close()
+    conn.close()
     return
   user = cur.fetchone()
   cur.close()
