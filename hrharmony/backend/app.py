@@ -43,6 +43,15 @@ def upload_file():
     helper_functions.edit_files.create_file_in_db(file_id, file_name, organization_id, departments)
   return response
 
+@app.route("/file", methods=["DELETE"])
+def delete_file():
+  request_data = request.get_json()
+  file_id = request_data["file_id"]
+  organization_id = request_data["organization_id"]
+  response = helper_functions.edit_files.delete_file_from_s3(organization_id, file_id)
+  if response["success"]:
+    helper_functions.edit_files.delete_file_from_db(file_id)
+  return response
 
 @app.route("/user", methods=["POST"])
 def create_user():
