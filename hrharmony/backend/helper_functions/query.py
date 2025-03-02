@@ -8,16 +8,22 @@ from openai import OpenAI
 load_dotenv()
 
 def get_bot_response(user_id, query, chat_messages=None):
-  chat_log_path = "backend/Databases/chat_log.json"
-  with open("backend/Databases/system_prompt.txt") as file:
-    SYSTEM_PROMPT = file.read()
 
+  paths = ["databases/chat_log.json", "databases/system_prompt.txt", "databases/user_query_template.txt"]
+  for path in paths:
+    if not os.path.exists(path):
+      return("this dir:" + path + ":" + str(os.listdir("databases")))
+  chat_log_path = "databases/chat_log.json"
+  try:
+    with open("databases/system_prompt.txt") as file:
+      SYSTEM_PROMPT = file.read()
+  except FileNotFoundError:
+    return("files in this dir:" + str(os.listdir())+ ":" + str(os.getcwd()))
   # Check if the chat log file exists and is not empty
   try:
     with open(chat_log_path, "r") as f:
       all_messages = json.load(f)
-  except json.JSONDecodeError:
-    print(f"Error reading JSON from {chat_log_path}. The file may be corrupt.")
+  except:
     all_messages = {}
   if user_id in all_messages.keys():
     chat_messages = all_messages[user_id]
@@ -25,8 +31,10 @@ def get_bot_response(user_id, query, chat_messages=None):
     chat_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
   # Retrieve relevant chunks from vector database
   chunks = helper_functions.vector_database.searchEmbedding(query)
+  if isinstance(chunks, str):
+    return chunks
   # Read the user query template
-  with open('backend/helper_functions/user_query_template.txt') as file:
+  with open('databases/user_query_template.txt') as file:
     user_prompt = file.read()
   # Replace placeholders
   user_prompt = user_prompt.replace("{USER_QUERY}", query)

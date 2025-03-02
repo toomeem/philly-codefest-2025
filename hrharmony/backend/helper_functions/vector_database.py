@@ -9,14 +9,14 @@ load_dotenv()
 
 # declare local constants
 COLLECTION_NAME = "hr_document"
-DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
 
 # Function to create and store embeddings
 def createEmbedding(phrase, title):
   # Create clients
+  DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
+  COLLECTION_NAME = "hr_document"
   OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
   clientOpenAI = OpenAI(api_key=OPENAI_API_KEY)
-
   response = clientOpenAI.embeddings.create(
     input=phrase,
     model="text-embedding-3-small",
@@ -44,7 +44,7 @@ def addFile(fileName):
     length_function = len,
     is_separator_regex= False
   )
-  with open("backend/Databases/" + fileName) as file:
+  with open("Databases/" + fileName) as file:
     text = file.read() # reads file and save as string
   #split string into a list of strings
   chunks = text_splitter.create_documents([text])
@@ -53,7 +53,8 @@ def addFile(fileName):
 
 #search for a like query
 def searchEmbedding(query):
-  # Get an existing collection
+  DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
+  COLLECTION_NAME = "hr_document"
   DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   client = DataAPIClient(DATASTAX_KEY)
   database = client.get_database(DATABASE_URL)
@@ -65,21 +66,21 @@ def searchEmbedding(query):
   )
   # Check if result is found
   if result is None:
-    print("No document found for the query.")
+    return("No document found for the query.")
     return
   # Constant to hold the length of each chunk
   CHUNK_LEN = 200
   title = result["title"]
 
   if not title:
-    print("No '_title' found in the result.")
+    return("No '_title' found in the result.")
     return
   # Split id into filename and chunk index
   try:
     chunk_index = int(title.split("_")[-1])  # Assuming chunk_index is an integer
     filename = title[:-len(str(chunk_index))-1]  # Remove the chunk index part to get the filename
   except ValueError as e:
-    print(f"Error extracting chunk index from title: {e}")
+    return(f"Error extracting chunk index from title: {e}")
     return
   # Create text splitter to divide up the file
   text_splitter = RecursiveCharacterTextSplitter(
@@ -88,10 +89,10 @@ def searchEmbedding(query):
     length_function=len,
     is_separator_regex=False
   )
-  file_path = f"backend/Databases/{filename}"
+  file_path = f"Databases/{filename}"
   # Check if the file exists before reading
   if not os.path.exists(file_path):
-    print(f"File {filename} does not exist.")
+    return(f"File {filename} does not exist.")
     return
 
   with open(file_path) as file:
@@ -100,13 +101,15 @@ def searchEmbedding(query):
     chunks = text_splitter.create_documents([text])
   # Ensure chunk_index is valid before accessing the chunks
   if chunk_index < 0 or chunk_index >= len(chunks):
-    print(f"Invalid chunk index: {chunk_index}")
+    return(f"Invalid chunk index: {chunk_index}")
     return
   if len(chunks) < 5:
     return chunks
   return chunks[:5]
 
 def deleteTableEntry(documentId):
+  DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
+  COLLECTION_NAME = "hr_document"
   # Replace with your Astra DB credentials
   DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   # Initialize DataAPIClient
@@ -119,6 +122,8 @@ def deleteTableEntry(documentId):
   print(f"Document with ID {documentId} deleted successfully.")
 
 def clearAllEntries():
+  DATABASE_URL = os.getenv("VECTOR_DATABASE_URL")
+  COLLECTION_NAME = "hr_document"
   DATASTAX_KEY = os.getenv("DATASTAX_KEY")
   # Initialize DataAPIClient
   client = DataAPIClient(DATASTAX_KEY)
