@@ -98,5 +98,13 @@ def delete_user():
   success = delete_user_in_db(id)
   return {"success": success}
 
+@app.route("/chat", methods=["POST"])
+def send_message():
+  request_data = request.get_json()
+  id = request_data["id"]
+  query = request_data["query"]
+  user = fetch_user_in_db(id=id)
+  
+
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080)
