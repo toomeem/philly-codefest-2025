@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def create_user(email, department, first_name, last_name, password):
+def create_user_in_db(email, department, first_name, last_name, password):
   id = str(uuid.uuid4())
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
@@ -22,8 +22,9 @@ def create_user(email, department, first_name, last_name, password):
   conn.commit()
   cur.close()
   conn.close()
+  return True
 
-def fetch_user(id=None, email=None, password=None):
+def fetch_user_in_db(id=None, email=None, password=None):
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
     database="postgres",
@@ -43,8 +44,8 @@ def fetch_user(id=None, email=None, password=None):
   conn.close()
   return user
 
-def update_user(id, email=None, department=None, first_name=None, last_name=None, password=None):
-  user = fetch_user(id=id)
+def update_user_in_db(id, email=None, department=None, first_name=None, last_name=None, password=None):
+  user = fetch_user_in_db(id=id)
   if not user:
     return
   conn = psycopg2.connect(
@@ -67,6 +68,25 @@ def update_user(id, email=None, department=None, first_name=None, last_name=None
     cur.execute(f"UPDATE users SET password='{password}' WHERE id='{id}'")
   conn.commit()
   cur.close()
+  return True
+
+def delete_user_in_db(id):
+  user = fetch_user_in_db(id=id)
+  if not user:
+    return
+  conn = psycopg2.connect(
+    host=os.getenv("RDS_ENDPOINT"),
+    database="postgres",
+    user=os.getenv("RDS_USERNAME"),
+    password=os.getenv("RDS_PASSWORD"),
+    port="5432"
+  )
+  cur = conn.cursor()
+  cur.execute(f"DELETE FROM users WHERE id='{id}'")
+  conn.commit()
+  cur.close()
+  conn.close()
+  return True
 
 def drop_db():
   conn = psycopg2.connect(

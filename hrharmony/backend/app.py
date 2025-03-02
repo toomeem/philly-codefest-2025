@@ -2,9 +2,9 @@ import random
 import string
 from pprint import pprint
 
-from Databases.Src.postgresql import create_user as create_user_in_db
-from Databases.Src.postgresql import fetch_user
 from flask import Flask, request
+
+from hrharmony.backend.helper_functions.edit_users import (fetch_user,          update_user_in_db, create_user_in_db, delete_user_in_db)
 
 app = Flask(__name__)
 
@@ -18,12 +18,13 @@ def generate_password():
 def home():
   return "HR Harmony"
 
-@app.route("/upload_file", methods=["POST"])
+@app.route("/file", methods=["POST"])
 def upload_file():
   file = request.files["file"]
 
   file.save(f"uploads/{file.filename}")
   return "200"
+
 
 
 @app.route("/user", methods=["POST"])
@@ -45,6 +46,20 @@ def get_user():
   password = request_data["password"]
   user = fetch_user(email, password)
   return {"user": user}
+
+@app.route("/user", methods=["PUT"])
+def update_user():
+  request_data = request.get_json()
+  id = request_data["id"]
+  success = update_user_in_db(id, **request_data)
+  return {"success": success}
+
+@app.route("/user", methods=["DELETE"])
+def delete_user():
+  request_data = request.get_json()
+  id = request_data["id"]
+  success = delete_user_in_db(id)
+  return {"success": success}
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=8080)
