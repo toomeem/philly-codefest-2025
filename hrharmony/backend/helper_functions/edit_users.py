@@ -104,7 +104,7 @@ def delete_user_in_db(id):
   conn.close()
   return True
 
-def drop_db():
+def drop_users_db():
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
     database="postgres",
@@ -118,7 +118,7 @@ def drop_db():
   cur.close()
   conn.close()
 
-def create_db():
+def create_users_db():
   conn = psycopg2.connect(
     host=os.getenv("RDS_ENDPOINT"),
     database="postgres",
